@@ -66,7 +66,7 @@ class TikTokPostFlattener:
             "web_keywords": "[]",
             "auth_id": author.get("id", ""),
             "auth_name": author.get("nickname", ""),
-            "auth_type": AuthType.USER,
+            "auth_type": AuthType.USER.value,
             "auth_url": self._build_author_url(unique_id),
             "source_id": post_id,
             "source_type": SourceType.TIKTOK.value,
