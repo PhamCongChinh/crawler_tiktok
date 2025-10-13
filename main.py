@@ -35,7 +35,7 @@ async def main_job():
             print(result)
         except:
             print("Lỗi")
-        await asyncio.sleep(3)
+        await asyncio.sleep(10)
     await mongo.close()
 
 async def main():
