@@ -2,6 +2,7 @@ import asyncio
 from datetime import datetime
 import os
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from api import postToESUnclassified
 from db.mongo import MongoDB
 from post import TikTokPostFlattener
 import scraper
@@ -30,11 +31,11 @@ async def main_job():
                 max_search=12
             )
             data = flattener.flatten_batch(search_data)
-            print(data)
-
+            result = await postToESUnclassified(data)
+            print(result)
         except:
-            print("Lỗi") 
-        break
+            print("Lỗi")
+        await asyncio.sleep(3)
     await mongo.close()
 
 async def main():

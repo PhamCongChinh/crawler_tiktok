@@ -77,8 +77,8 @@ class TikTokPostFlattener:
             "sentiment": 0,
             "isPriority": False,
             "crawl_bot": self.crawl_bot,
-            "createdAt": datetime.now(),
-            "updatedAt": datetime.now()
+            # "createdAt": datetime.now(),
+            # "updatedAt": datetime.now()
         }
     
     def _build_video_url(self, unique_id: str, post_id: Optional[str]) -> str:
