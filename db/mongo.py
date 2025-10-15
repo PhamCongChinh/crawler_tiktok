@@ -19,7 +19,6 @@ class MongoDB:
                 MONGO_URI,
                 maxPoolSize=10,
                 minPoolSize=1,
-                socketKeepAlive=True,
                 connectTimeoutMS=20000,
                 serverSelectionTimeoutMS=10000,
             )
