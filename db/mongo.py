@@ -15,7 +15,14 @@ class MongoDB:
     async def connect(self):
         if self._client is None:
             print(f"🔌 Kết nối MongoDB đến {MONGO_URI}/{MONGO_DB} ...")
-            self._client = AsyncIOMotorClient(MONGO_URI)
+            self._client = AsyncIOMotorClient(
+                MONGO_URI,
+                maxPoolSize=10,
+                minPoolSize=1,
+                socketKeepAlive=True,
+                connectTimeoutMS=20000,
+                serverSelectionTimeoutMS=10000,
+            )
             self._db = self._client[MONGO_DB]
             print("✅ Đã kết nối MongoDB thành công!")
 
