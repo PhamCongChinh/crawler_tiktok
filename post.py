@@ -70,7 +70,7 @@ class TikTokPostFlattener:
             "auth_url": self._build_author_url(unique_id),
             "source_id": post_id,
             "source_type": SourceType.TIKTOK.value,
-            "source_name": None,
+            "source_name": author.get("nickname", ""),
             "source_url": self._build_video_url(unique_id, post_id),
             "reply_to": None,
             "level": None,

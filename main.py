@@ -37,7 +37,7 @@ async def main_job():
                 print(f"🔍 Đang xử lý keyword: {kw}")
 
                 # Gọi scraper
-                search_data = await scraper.scrape_search(keyword=kw, max_search=12)
+                search_data = await scraper.scrape_search(keyword=kw, max_search=48)
                 data = flattener.flatten_batch(search_data)
 
                 # Gửi dữ liệu lên Elasticsearch
