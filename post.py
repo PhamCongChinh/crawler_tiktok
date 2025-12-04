@@ -3,6 +3,7 @@ from typing import Dict, Any, Optional
 from enum import IntEnum
 from dotenv import load_dotenv
 import os
+import time
 
 class DocType(IntEnum):
     """Loại document"""
@@ -44,6 +45,12 @@ class TikTokPostFlattener:
         stats = data.get("stats", {})
         post_id = data.get("id")
         unique_id = author.get("uniqueId", "")
+
+        now = int(time.time())
+        days_ago = now - 2 * 86400
+        pubtime = data.get("createTime", 0)
+        if pubtime < days_ago:
+            return None
         
         return {
             "doc_type": DocType.POST.value,
@@ -76,9 +83,7 @@ class TikTokPostFlattener:
             "level": None,
             "sentiment": 0,
             "isPriority": False,
-            "crawl_bot": self.crawl_bot,
-            # "createdAt": datetime.now(),
-            # "updatedAt": datetime.now()
+            "crawl_bot": self.crawl_bot
         }
     
     def _build_video_url(self, unique_id: str, post_id: Optional[str]) -> str:
@@ -91,7 +96,11 @@ class TikTokPostFlattener:
         return f"{self.BASE_URL}/@{unique_id}"
     
     def flatten_batch(self, data_list: list[Dict[str, Any]]) -> list[Dict[str, Any]]:
-        return [self.flatten(data) for data in data_list]
+        # return [self.flatten(data) for data in data_list]
+        return [
+            item for item in (self.flatten(data) for data in data_list)
+            if item is not None
+        ]
 
 
 # ==================== Ví dụ sử dụng ====================

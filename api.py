@@ -5,6 +5,7 @@ load_dotenv()
 URL_UNCLASSIFIED = os.getenv("URL_UNCLASSIFIED", "")
 
 async def postToESUnclassified(content: any) -> any:
+    total = len(content)
     data = {
         "index": "not_classify_org_posts",
         "data": content,
@@ -13,6 +14,7 @@ async def postToESUnclassified(content: any) -> any:
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(URL_UNCLASSIFIED, json=data)
+            print(f"Đã đẩy {total}")
             print(response)
         
     except httpx.HTTPStatusError as e:
