@@ -24,6 +24,19 @@ DELAY = int(os.getenv("DELAY"))
 output = Path(__file__).parent / "results"
 output.mkdir(exist_ok=True)
 
+def get_server_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip = s.getsockname()[0]
+    s.close()
+    return ip
+
+
+MONITOR_URL = "http://222.254.14.6:8100/api/heartbeat/heartbeat"
+BOT_ID = "213"
+BOT_TYPE = "tiktok"
+SERVER_IP = get_server_ip()
+timestamp = int(time.time())
 
 mongo = MongoDB()
 flattener = TikTokPostFlattener()
@@ -124,26 +137,16 @@ async def main():
         print("🧹 Đang đóng kết nối MongoDB...")
         await mongo.close()
 
-def get_server_ip():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    ip = s.getsockname()[0]
-    s.close()
-    return ip
 
 
-MONITOR_URL = "http://222.254.14.6:8100/api/heartbeat/heartbeat"
-BOT_ID = "213"
-BOT_TYPE = "tiktok"
-SERVER_IP = get_server_ip()
-timestamp = int(time.time())
+
 
 payload = {
     "botId": BOT_ID,
     "botType": BOT_TYPE,
     "serverIp": SERVER_IP,
     "lastPingAt": timestamp,
-    "status": "STOP"
+    "status": "RUNNIG"
 }
 
 async def send_heartbeat():
