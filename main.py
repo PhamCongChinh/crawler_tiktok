@@ -3,14 +3,15 @@ from datetime import datetime, timedelta
 import json
 import os
 from pathlib import Path
+import time
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+import httpx
 from api import postToESUnclassified
 from db.mongo import MongoDB
 from post import TikTokPostFlattener
 import scraper
 import ast
 import socket
-import aiohttp
 from datetime import datetime, timezone
 
 from dotenv import load_dotenv
@@ -123,40 +124,47 @@ async def main():
         print("🧹 Đang đóng kết nối MongoDB...")
         await mongo.close()
 
-def get_local_ip():
+def get_server_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     ip = s.getsockname()[0]
     s.close()
     return ip
 
-async def ping_api():
-    ts = datetime.now(timezone.utc).strftime("%H:%M:%S %d/%m/%Y")
-    async with aiohttp.ClientSession() as session:
-        while True:
-            try:
-                await session.post(
-                    "http://222.254.14.6:8100/api/heartbeat/heartbeat",
-                    json={
-                        "botId": "crawl-node-01",
-                        "botType": "Tiktok",
-                        "serverIp": get_local_ip(),
-                        "lastPingAt": ts,
-                        "status": "RUNNING"
-                    }
-                )
-                print("❤️ Heartbeat sent")
-            except Exception as e:
-                print("Ping error:", e)
 
-            await asyncio.sleep(10)
+MONITOR_URL = "http://222.254.14.6:8100/api/heartbeat/heartbeat"
+BOT_ID = "213"
+BOT_TYPE = "tiktok"
+SERVER_IP = get_server_ip()
+timestamp = int(time.time())
+
+payload = {
+    "botId": BOT_ID,
+    "botType": BOT_TYPE,
+    "serverIp": SERVER_IP,
+    "lastPingAt": timestamp,
+    "status": "STOP"
+}
+
+async def send_heartbeat():
+    try:
+        async with httpx.AsyncClient(timeout=5) as client:
+            response = await client.post(
+                MONITOR_URL,
+                json=payload,
+                headers={"Content-Type": "application/json"}
+            )
+            response.raise_for_status()
+            print("Heartbeat sent:", response.json())
+
+    except httpx.HTTPError as e:
+        print("Error sending heartbeat:", e)
 
 async def run_app():
-    print("🖥 Local IP:", get_local_ip())
 
     await asyncio.gather(
         main(),        # bot crawl
-        ping_api()     # heartbeat 10s
+        send_heartbeat()     # heartbeat 10s
     )
 
 if __name__ == "__main__":

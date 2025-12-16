@@ -4,7 +4,6 @@ aiosignal==1.4.0
 annotated-doc==0.0.3
 annotated-types==0.7.0
 anyio==4.11.0
-app @ file:///C:/Users/ThinkPad/Desktop/New%20folder%20%282%29/test/app-0.1.0-py3-none-any.whl#sha256=302d8f547d26d116fca72ec58f6dbbb851e506e5c42e48d5d5116f2b4ad50d2b
 APScheduler==3.11.0
 argcomplete==3.6.2
 attrs==25.4.0
