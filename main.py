@@ -33,7 +33,7 @@ def get_server_ip():
 
 
 MONITOR_URL = "http://222.254.14.6:8100/api/heartbeat/heartbeat"
-BOT_ID = "bot_tiktok_test"
+BOT_ID = "bot_tiktok_live"
 BOT_TYPE = "tiktok"
 SERVER_IP = get_server_ip()
 timestamp = int(time.time())
@@ -62,8 +62,7 @@ async def main_job():
                     # Gọi scraper
                     search_data = await scraper.scrape_search(keyword=kw)
                     data = flattener.flatten_batch(search_data)
-                    with open(output.joinpath("search.json"), "w", encoding="utf-8") as file:
-                        json.dump(data, file, indent=2, ensure_ascii=False)
+                    
                     print(f"[{org}]Tổng dữ liệu {len(data)}")
                     if (len(data) > 0):
                         # Gửi dữ liệu lên Elasticsearch
@@ -77,9 +76,7 @@ async def main_job():
 
                 # Nghỉ giữa các lần xử lý để tránh bị rate-limit
                 await asyncio.sleep(5)
-                break
             print("[{org}]🏁 Job hoàn tất!")
-            break
         # Đếm số keyword
         # count = await keywords.count_documents({"org_id": ORG_ID, "status": STATUS})
         # print("Tổng số keyword tìm thấy:", count)
@@ -125,8 +122,6 @@ async def main():
         main_job,
         "interval",
         minutes=DELAY
-        # next_run_time=datetime.now()  # chạy ngay lần đầu
-        # next_run_time=datetime.now() + timedelta(seconds=2)
     )
     scheduler.start()
     print("✅ Scheduler started. Waiting for jobs...")
