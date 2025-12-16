@@ -146,7 +146,7 @@ payload = {
     "botType": BOT_TYPE,
     "serverIp": SERVER_IP,
     "lastPingAt": timestamp,
-    "status": "RUNNIG"
+    "status": "RUNNING"
 }
 
 async def send_heartbeat():
