@@ -33,7 +33,7 @@ def get_server_ip():
 
 
 MONITOR_URL = "http://222.254.14.6:8100/api/heartbeat/heartbeat"
-BOT_ID = "213"
+BOT_ID = "bot_tiktok_test"
 BOT_TYPE = "tiktok"
 SERVER_IP = get_server_ip()
 timestamp = int(time.time())
@@ -136,10 +136,6 @@ async def main():
     finally:
         print("🧹 Đang đóng kết nối MongoDB...")
         await mongo.close()
-
-
-
-
 
 payload = {
     "botId": BOT_ID,
