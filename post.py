@@ -47,7 +47,7 @@ class TikTokPostFlattener:
         unique_id = author.get("uniqueId", "")
 
         now = int(time.time())
-        days_ago = now - 2 * 86400
+        days_ago = now - 7 * 86400
         pubtime = data.get("createTime", 0)
         if pubtime < days_ago:
             return None
